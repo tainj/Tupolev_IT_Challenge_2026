@@ -1,9 +1,12 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.api.endpoints import users, auth
-from app.core.config import settings
+from app.api.endpoints import auth
 
-app = FastAPI(title="TupolevITChallenge2026", version="1.0.0")
+app = FastAPI(
+    title="TupolevITChallenge2026",
+    version="1.0.0",
+    description="API для проекта",
+)
 
 # CORS
 app.add_middleware(
@@ -15,9 +18,14 @@ app.add_middleware(
 )
 
 # Роуты
-app.include_router(users.router, prefix="/api/users", tags=["Users"])
 app.include_router(auth.router, prefix="/api/auth", tags=["Auth"])
+
 
 @app.get("/health")
 async def health_check():
     return {"status": "ok"}
+
+
+@app.get("/")
+async def root():
+    return {"message": "Welcome to TupolevITChallenge2026 API"}

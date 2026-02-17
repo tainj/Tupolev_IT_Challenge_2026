@@ -1,0 +1,46 @@
+# Секреты и окружение
+.env
+.env.*
+!.env.example
+
+# Виртуальное окружение
+venv/
+env/
+ENV/
+.venv/
+virtualenv/
+
+# Кэши Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.hypothesis/
+
+# Дистрибутивы и сборки
+dist/
+build/
+*.egg-info/
+*.egg
+
+# Базы данных (если вдруг кто-то создаст локальную)
+*.db
+*.sqlite3
+
+# Логи
+*.log
+logs/
+
+# IDEs и редакторы
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Docker (если не хотите коммитить образы или volumes)
+.dockerignore
+docker-compose.override.yml

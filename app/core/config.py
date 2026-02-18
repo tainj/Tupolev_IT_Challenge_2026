@@ -17,6 +17,7 @@ class Settings(BaseSettings):
     SECRET_KEY: str = "your-super-secret-key-change-in-prod"
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+    REMEMBER_ME_ACCESS_TOKEN_EXPIRE: timedelta = timedelta(days=30)
 
     # Приложение
     DEBUG: bool = True

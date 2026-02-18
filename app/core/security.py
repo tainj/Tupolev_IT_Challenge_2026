@@ -3,6 +3,7 @@ from typing import Optional
 from jose import jwt, JWTError
 from passlib.context import CryptContext
 from app.core.config import settings
+from app.models import User
 
 # Контекст для хеширования паролей (bcrypt)
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -29,3 +30,7 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
 
     # Подпись токена (ключ из конфига)
     return jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
+
+'''Создаёт токен с id пользователя'''
+def create_user_access_token(id: str, expires_delta: Optional[timedelta] = None) -> str:
+    return create_access_token({"sub": str(id)}, expires_delta)

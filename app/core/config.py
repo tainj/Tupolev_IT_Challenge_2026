@@ -32,6 +32,16 @@ class Settings(BaseSettings):
 
         return f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@localhost:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
 
+
+    @property
+    def get_sync_database_url(self) -> str:
+        """Для Alembic (sync, psycopg2)"""
+        # Если задан DATABASE_URL, заменяем в нём драйвер на psycopg2
+        if self.DATABASE_URL:
+            return self.DATABASE_URL.replace("+asyncpg", "")
+        # Иначе собираем строку с явным указанием psycopg2
+        return f"postgresql://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@localhost:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
+
     class Config:
         env_file = ".env"
         extra = "ignore"

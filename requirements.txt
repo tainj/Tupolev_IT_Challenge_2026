@@ -2,3 +2,12 @@ pydantic-settings
 sqlalchemy
 python-jose
 passlib
+pydantic
+fastapi
+asyncpg
+email-validator
+alembic
+uliweb-alembic
+python-dotenv
+psycopg2-binary
+uvicorn

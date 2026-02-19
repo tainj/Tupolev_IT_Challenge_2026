@@ -5,6 +5,7 @@ from typing import Annotated
 from app.services.user import UserService
 from app.core.database import get_db
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.core.security import has_claims
 
 app = FastAPI(
     title="TupolevITChallenge2026",
@@ -38,10 +39,12 @@ async def root(
     if authorization:
         user_service = UserService(db)
         user = None
-        if len(authorization.split(" ")) > 2:
-            user = await user_service.get_user_from_jwt(authorization.split(" ")[1])
+        token = ""
+        if len(authorization.split(" ")) == 2:
+            token = authorization.split(" ")[1]
+            user = await user_service.get_user_from_jwt(token)
         if user:
             return {
-                "message": f"Welcome to TupolevITChallenge2026 API, {user.username}"
+                "message": f"Welcome to TupolevITChallenge2026 API, {user.username}. Has user claim: {has_claims(token, ["user"])}. Has admin claim: {has_claims(token, ["admin"])}"
             }
     return {"message": "Welcome to TupolevITChallenge2026 API"}

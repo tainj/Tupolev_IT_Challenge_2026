@@ -36,5 +36,25 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
 """Создаёт токен с id пользователя"""
 
 
-def create_user_access_token(id: str, expires_delta: Optional[timedelta] = None) -> str:
-    return create_access_token({"sub": str(id)}, expires_delta)
+def create_user_access_token(id: str, expires_delta: Optional[timedelta] = None, claims: Optional[list[str]] = []) -> str:
+    claims_string = ""
+    for i in range(len(claims)):
+        claims_string += claims[i]
+        if i != len(claims) - 1:
+            claims_string += ","
+    return create_access_token({"sub": str(id), "claims":claims_string}, expires_delta)
+
+def has_claims(token: str, check_claims: list[str]) -> bool:
+    try:
+        payload = jwt.decode(
+            token, settings.SECRET_KEY, algorithms=settings.ALGORITHM
+        )
+        claims = payload.get("claims").split()
+        if not claims:
+            return False
+        for c in check_claims:
+            if c not in claims:
+                return False
+        return True
+    except Exception():
+        return False

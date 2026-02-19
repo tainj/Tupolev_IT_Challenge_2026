@@ -67,3 +67,4 @@ class UserService:
             return None
         user = await self.get_by_id(int(user_id))
         return user
+    

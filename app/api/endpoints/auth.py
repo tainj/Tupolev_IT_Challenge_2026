@@ -53,7 +53,7 @@ async def login(user_data: UserLogin, db: AsyncSession = Depends(get_db)):
         time_delta = None
         if user_data.remember_me:
             time_delta = settings.REMEMBER_ME_ACCESS_TOKEN_EXPIRE
-        token = create_user_access_token(user.id, time_delta)
+        token = create_user_access_token(user.id, time_delta, claims=["user"])
         return Token(access_token=token, token_type="Bearer")
 
     raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Неверный пароль")

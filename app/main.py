@@ -4,6 +4,7 @@ from app.api.endpoints import auth
 from typing import Annotated
 from app.services.user import UserService
 from app.core.database import get_db
+from sqlalchemy.ext.asyncio import AsyncSession
 
 app = FastAPI(
     title="TupolevITChallenge2026",

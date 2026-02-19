@@ -1,8 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.responses import PlainTextResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.database import get_db
 from app.services.user import UserService
-from app.schemas.user import UserCreate, UserResponse
+from app.schemas.user import UserCreate, UserResponse, UserLogin
+from app.core.security import verify_password, create_user_access_token
+from app.schemas.token import Token
+from app.core.config import settings
 
 router = APIRouter()
 
@@ -26,3 +30,30 @@ async def register(
     user = await service.create_user(user_data)
 
     return user
+
+'''Если пользователь ввёл верные данные, то генерирует и отправляет JWT токен'''
+@router.post("/login", response_model=Token, status_code=status.HTTP_200_OK)
+async def login(
+    user_data: UserLogin,
+    db: AsyncSession = Depends(get_db)
+):
+    service = UserService(db)
+    user = await service.get_by_login(user_data.login)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Нет пользователя с таким email или username"
+        )
+    
+    if verify_password(user_data.password, user.password_hash):
+        time_delta = None
+        if user_data.remember_me:
+            time_delta = settings.REMEMBER_ME_ACCESS_TOKEN_EXPIRE
+        token = create_user_access_token(user.id, time_delta)
+        return Token(access_token=token, token_type="Bearer")
+
+    raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Неверный пароль"
+        )
+    

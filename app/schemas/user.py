@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, Field, ConfigDict
+from pydantic import BaseModel, EmailStr, Field, ConfigDict, field_validator
 from datetime import datetime
 from typing import Optional
 
@@ -14,15 +14,16 @@ class UserCreate(BaseModel):
 
 class UserLogin(BaseModel):
     """Схема для входа"""
-    email: EmailStr
+    login: str
     password: str
+    remember_me: bool
 
 
 class UserUpdate(BaseModel):
     """Схема для обновления профиля"""
     email: Optional[EmailStr] = None
-    username: Optional[str] = Field(None, min_length=3, max_length=50)
-    password: Optional[str] = Field(None, min_length=8)
+    username: Optional[str] = Field(None, min_length=3, max_length=50, pattern="^[a-zA-Z0-9_]+$")
+    password: Optional[str] = Field(None, min_length=8, description="Минимум 8 символов")
     is_active: Optional[bool] = None
 
 

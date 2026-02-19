@@ -34,9 +34,10 @@ async def health_check():
 async def root(authorization: Annotated[str | None, Header(alias="Authorization")] = None,
                 db: AsyncSession = Depends(get_db)):
     if authorization:
-        print(authorization)
         user_service = UserService(db)
-        user = await user_service.get_user_from_jwt(authorization.split(" ")[1])
+        user = None
+        if len(authorization.split(" ")) > 2:
+            user = await user_service.get_user_from_jwt(authorization.split(" ")[1])
         if user:
             return {"message": f"Welcome to TupolevITChallenge2026 API, {user.username}"}
     return {"message": f"Welcome to TupolevITChallenge2026 API"}   

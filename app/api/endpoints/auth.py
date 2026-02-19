@@ -27,7 +27,7 @@ async def register(user_data: UserCreate, db: AsyncSession = Depends(get_db)):
     if existing_user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Пользователь с таким именем уже существует"
+            detail="Пользователь с таким именем уже существует",
         )
 
     # Создание пользователя

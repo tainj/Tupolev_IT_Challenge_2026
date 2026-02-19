@@ -1,3 +1,4 @@
+# Core
 pydantic-settings
 sqlalchemy
 python-jose
@@ -11,3 +12,6 @@ uliweb-alembic
 python-dotenv
 psycopg2-binary
 uvicorn
+
+# Development
+ruff

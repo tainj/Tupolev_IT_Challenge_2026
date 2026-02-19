@@ -26,6 +26,13 @@ async def register(
             detail="Email уже зарегистрирован"
         )
 
+    existing_user = await service.get_by_username(user_data.username)
+    if existing_user:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Пользователь с таким именем уже существует"
+        )
+
     # Создание пользователя
     user = await service.create_user(user_data)
 

@@ -33,7 +33,6 @@ class Settings(BaseSettings):
 
         return f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@localhost:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
 
-
     @property
     def get_sync_database_url(self) -> str:
         """Для Alembic (sync, psycopg2)"""
